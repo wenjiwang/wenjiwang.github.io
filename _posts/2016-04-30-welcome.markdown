@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "hello jekyll!"
+date:   2015-02-10 15:14:54
+categories: jekyll
+---
+
+# Hello World
+
+第一篇博客
+
+Welcome, my friends!
+
+contact : wenjiwork@163.com
