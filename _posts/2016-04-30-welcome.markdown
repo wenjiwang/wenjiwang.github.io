@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "hello jekyll!"
-date:   2015-02-10 15:14:54
-categories: jekyll
+title:  "hello world!"
+date:   2016-04-30 22:30:00
+categories: others
 ---
 
 # Hello World
