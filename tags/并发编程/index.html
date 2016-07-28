@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>没牙的鲨鱼和他的朋友们</title>
+  <title>Tag: 并发编程 | 没牙的鲨鱼和他的朋友们</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="专注互联网技术产品与吃喝玩乐">
 <meta property="og:type" content="website">
 <meta property="og:title" content="没牙的鲨鱼和他的朋友们">
-<meta property="og:url" content="http://wenjiwang.github.io/index.html">
+<meta property="og:url" content="http://wenjiwang.github.io/tags/并发编程/index.html">
 <meta property="og:site_name" content="没牙的鲨鱼和他的朋友们">
 <meta property="og:description" content="专注互联网技术产品与吃喝玩乐">
 <meta name="twitter:card" content="summary">
@@ -177,124 +177,52 @@
 
       <div class="body-wrap">
   
-    <article id="post-AtomicConcurrency" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2016/07/28/AtomicConcurrency/" class="article-date">
-  	<time datetime="2016-07-28T15:13:18.000Z" itemprop="datePublished">2016-07-28</time>
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2016" class="archive-year">2016</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2016/07/28/AtomicConcurrency/" class="archive-article-date">
+  	<time datetime="2016-07-28T15:13:18.000Z" itemprop="datePublished">Jul 28</time>
 </a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+        </div>
+    	 
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/28/AtomicConcurrency/">Java并发原子操作类</a>
+      <a class="archive-article-title" href="/2016/07/28/AtomicConcurrency/">Java并发原子操作类</a>
     </h1>
   
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-无锁的基本概念"><a href="#1-无锁的基本概念" class="headerlink" title="1.无锁的基本概念"></a>1.无锁的基本概念</h2><h3 id="1-1-无锁的使用场景"><a href="#1-1-无锁的使用场景" class="headerlink" title="1.1 无锁的使用场景"></a>1.1 无锁的使用场景</h3><p>让所有线程都进入临界区，大家利用CAS机制循环尝试，总会有一个线程会修改成功。而且无锁线程不会被挂起，因此性能要高于有锁线程。</p>
-<h3 id="1-2-CAS原理"><a href="#1-2-CAS原理" class="headerlink" title="1.2 CAS原理"></a>1.2 CAS原理</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CAS(V, E, N);</div><div class="line"><span class="keyword">return</span> V;</div></pre></td></tr></table></figure>
-<ul>
-<li>V：要更新的变量</li>
-<li>E：expected变量现有的值</li>
-<li>N：new值</li>
-</ul>
-<p>当且仅当<em>V == E</em>时，才把<em>N</em>赋值给<em>E</em>，否则则说明其他线程已经把它的值改了</p>
-<h2 id="2-基于无锁的原子操作类"><a href="#2-基于无锁的原子操作类" class="headerlink" title="2.基于无锁的原子操作类"></a>2.基于无锁的原子操作类</h2>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发编程/">并发编程</a></li></ul>
 	</div>
 
-      
+          
 
-      
-      <div class="clearfix"></div>
-    </div>
-    
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
-  
 </article>
-
-
-
-
-
-
-
-
-
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2016/07/03/hello-world/" class="article-date">
-  	<time datetime="2016-07-03T15:50:22.000Z" itemprop="datePublished">2016-07-03</time>
-</a>
-    </div>
+    </div></section>
   
-  <div class="article-inner">
+
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/03/hello-world/">Hello World</a>
-    </h1>
-  
 
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>没牙的鲨鱼和他的朋友们欢迎你！<br>我们一起来学术交流&amp;装逼！<br>本站基于牛逼的<a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>搭建，出自台湾tommy351之手，它是基于Node.js的，源码在这里<a href="https://github.com/hexojs/hexo" target="_blank" rel="external">GitHub</a>，样式选用了简洁大方的<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">yilia</a></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -318,10 +246,10 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
+		isHome: false,
 		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false
 	}
