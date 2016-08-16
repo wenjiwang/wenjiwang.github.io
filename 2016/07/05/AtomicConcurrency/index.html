@@ -29,7 +29,7 @@ N：new值
 当且仅当V == E时，才把N赋值给E，否则则说明其他线程已经把它的值改了
 2.基于无锁的原子">
 <meta property="og:image" content="http://static.oschina.net/uploads/img/201511/26152934_8JvD.jpg">
-<meta property="og:updated_time" content="2016-08-16T17:22:32.000Z">
+<meta property="og:updated_time" content="2016-08-16T17:26:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发原子操作类">
 <meta name="twitter:description" content="1.无锁的基本概念1.1 无锁的使用场景让所有线程都进入临界区，大家利用CAS机制循环尝试，总会有一个线程会修改成功。而且无锁线程不会被挂起，因此性能要高于有锁线程。
@@ -99,7 +99,7 @@ N：new值
 						<li>Tags</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -338,7 +338,7 @@ N：new值
 <p><img src="http://static.oschina.net/uploads/img/201511/26152934_8JvD.jpg" alt="ABA问题"></p>
 <p>线程A读取的时候线程B已经把它改回来了，这样A会误以为它没有变更过，典型的业务例子就是：给每个用户余额小于20元的用户发红包，但是如果这个用户领过红包又消费掉了，就不算数了，这个时候我们就借助带时间戳的AtomicStampedReference，在比较expect的同时还要比较时间戳是否和预期一致：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicStampedReferenceTest</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> AtomicStampedReference&lt;Integer&gt; money = <span class="keyword">new</span> AtomicStampedReference&lt;&gt;(<span class="number">19</span>, <span class="number">0</span>);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> timestamp = money.getStamp();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">            <span class="keyword">new</span> Thread() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    Integer value = money.getReference();</div><div class="line">                    <span class="keyword">if</span> (value &lt; <span class="number">20</span>) &#123;</div><div class="line">                        <span class="keyword">boolean</span> success = money.compareAndSet(value, value + <span class="number">20</span>, timestamp, timestamp + <span class="number">1</span>); <span class="comment">// 将timestamp修改之后，以后timestamp永远对不上就不会再修改</span></div><div class="line">                        <span class="keyword">if</span> (success) &#123;</div><div class="line">                            System.out.println(<span class="string">"发送红包成功"</span>);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;.start();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="2-4-数组的原子操作"><a href="#2-4-数组的原子操作" class="headerlink" title="2.4 数组的原子操作"></a>2.4 数组的原子操作</h3><p>用于通过原子方式更新数组中的某个元素，包括三个类：<em>AtomicIntegerArray, AtomicLongArray, AtomicReferenceArray</em>，这里以<em>AtomicIntegerArray</em>为例进行说明：</p>
+<h3 id="2-4-数组的原子操作"><a href="#2-4-数组的原子操作" class="headerlink" title="2.4 数组的原子操作"></a>2.4 数组的原子操作</h3><p>用于通过原子方式更新数组中的某个元素，包括三个类：<em>AtomicIntegerArray, AtomicLongArray, AtomicReferenceArray</em>，内部维护了一个数组如<em>int[] array</em>，通过计算下标的字节偏移量使用unsafe的接口进行操作，这里以<em>AtomicIntegerArray</em>为例进行说明：</p>
 <h4 id="常用API-2"><a href="#常用API-2" class="headerlink" title="常用API"></a>常用API</h4><table>
 <thead>
 <tr>
