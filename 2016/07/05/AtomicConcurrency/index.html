@@ -29,7 +29,7 @@ N：new值
 当且仅当V == E时，才把N赋值给E，否则则说明其他线程已经把它的值改了
 2.基于无锁的原子">
 <meta property="og:image" content="http://static.oschina.net/uploads/img/201511/26152934_8JvD.jpg">
-<meta property="og:updated_time" content="2016-08-04T15:51:38.000Z">
+<meta property="og:updated_time" content="2016-08-16T17:22:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发原子操作类">
 <meta name="twitter:description" content="1.无锁的基本概念1.1 无锁的使用场景让所有线程都进入临界区，大家利用CAS机制循环尝试，总会有一个线程会修改成功。而且无锁线程不会被挂起，因此性能要高于有锁线程。
@@ -99,7 +99,7 @@ N：new值
 						<li>Tags</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -294,6 +294,7 @@ N：new值
 </tr>
 </tbody>
 </table>
+<p><strong>注意</strong>：接口名字的顺序决定着先获取再设置还是先设置再获取，例如<em>addAndGet</em>就是先加后取，取出来的是新值，<em>getAndAdd</em>就是先取后加，取出来的就是旧值，下同</p>
 <h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p>用无锁AtomicInteger实现一个多线程的计数器：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicIntegerTest</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> AtomicInteger atomicInteger = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 非线程安全计数器</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">count</span><span class="params">()</span> </span>&#123;</div><div class="line">        i++;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 线程安全计数器</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">safeCount</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (; ; ) &#123;</div><div class="line">            <span class="keyword">int</span> i = atomicInteger.get();</div><div class="line">            <span class="keyword">boolean</span> success = atomicInteger.compareAndSet(i, ++i);</div><div class="line">            <span class="keyword">if</span> (success) &#123;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> AtomicIntegerTest atomicIntegerTest = <span class="keyword">new</span> AtomicIntegerTest();</div><div class="line">        List&lt;Thread&gt; threadList = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">500</span>);</div><div class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</div><div class="line">        <span class="comment">// 开启线程</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100</span>; j++) &#123;</div><div class="line">            Thread t = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="number">100000</span>; k++) &#123;</div><div class="line">                        atomicIntegerTest.count();</div><div class="line">                        atomicIntegerTest.safeCount();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            threadList.add(t);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 运行线程</span></div><div class="line">        <span class="keyword">for</span> (Thread thread : threadList) &#123;</div><div class="line">            thread.start();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 等待所有线程结束</span></div><div class="line">        <span class="keyword">for</span> (Thread thread : threadList) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                thread.join();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 输出结果</span></div><div class="line">        System.out.println(atomicIntegerTest.i);</div><div class="line">        System.out.println(atomicIntegerTest.atomicInteger.get());</div><div class="line">        System.out.println(System.currentTimeMillis() - start);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="内部原理"><a href="#内部原理" class="headerlink" title="内部原理"></a>内部原理</h4><p>AtomicInteger里面的方法基本底层都是<em>compareAndSet</em>，这个方法是通过调用<em>unsafe</em>的方法实现CAS操作，<em>unsafe</em>提供了三种CAS方法，<em>compareAndSwapInt, compareAndSwapLong, compareAndSwapObject</em>，即：</p>
@@ -337,6 +338,49 @@ N：new值
 <p><img src="http://static.oschina.net/uploads/img/201511/26152934_8JvD.jpg" alt="ABA问题"></p>
 <p>线程A读取的时候线程B已经把它改回来了，这样A会误以为它没有变更过，典型的业务例子就是：给每个用户余额小于20元的用户发红包，但是如果这个用户领过红包又消费掉了，就不算数了，这个时候我们就借助带时间戳的AtomicStampedReference，在比较expect的同时还要比较时间戳是否和预期一致：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicStampedReferenceTest</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> AtomicStampedReference&lt;Integer&gt; money = <span class="keyword">new</span> AtomicStampedReference&lt;&gt;(<span class="number">19</span>, <span class="number">0</span>);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> timestamp = money.getStamp();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">            <span class="keyword">new</span> Thread() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    Integer value = money.getReference();</div><div class="line">                    <span class="keyword">if</span> (value &lt; <span class="number">20</span>) &#123;</div><div class="line">                        <span class="keyword">boolean</span> success = money.compareAndSet(value, value + <span class="number">20</span>, timestamp, timestamp + <span class="number">1</span>); <span class="comment">// 将timestamp修改之后，以后timestamp永远对不上就不会再修改</span></div><div class="line">                        <span class="keyword">if</span> (success) &#123;</div><div class="line">                            System.out.println(<span class="string">"发送红包成功"</span>);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;.start();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-4-数组的原子操作"><a href="#2-4-数组的原子操作" class="headerlink" title="2.4 数组的原子操作"></a>2.4 数组的原子操作</h3><p>用于通过原子方式更新数组中的某个元素，包括三个类：<em>AtomicIntegerArray, AtomicLongArray, AtomicReferenceArray</em>，这里以<em>AtomicIntegerArray</em>为例进行说明：</p>
+<h4 id="常用API-2"><a href="#常用API-2" class="headerlink" title="常用API"></a>常用API</h4><table>
+<thead>
+<tr>
+<th>返回类型</th>
+<th>接口</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>int</em></td>
+<td><em>addAndGet(int i, int delta)</em></td>
+<td>将<em>i</em>下标的元素加上delta</td>
+</tr>
+<tr>
+<td><em>boolean</em></td>
+<td><em>compareAndSet(int i, int expect, int update)</em></td>
+<td>将<em>i</em>下标的元素比较后更新.</td>
+</tr>
+<tr>
+<td><em>int</em></td>
+<td><em>get(int i)</em></td>
+<td>获取<em>i</em>下标的元素</td>
+</tr>
+<tr>
+<td><em>int</em></td>
+<td><em>length()</em></td>
+<td>获取数组长度</td>
+</tr>
+<tr>
+<td><em>int</em></td>
+<td><em>getAndSet(int i, int newValue)</em></td>
+<td>将<em>i</em>下标的元素设置为newValue</td>
+</tr>
+<tr>
+<td><em>int</em></td>
+<td><em>getAndIncrement(int i)</em></td>
+<td>将<em>i</em>下标的元素加1</td>
+</tr>
+</tbody>
+</table>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicIntegerArrayTest</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">int</span>[] array = &#123;<span class="number">1</span>, <span class="number">2</span>&#125;;</div><div class="line"></div><div class="line">        AtomicIntegerArray atomicIntegerArray = <span class="keyword">new</span> AtomicIntegerArray(array);</div><div class="line">        atomicIntegerArray.getAndSet(<span class="number">0</span>, <span class="number">3</span>);</div><div class="line"></div><div class="line">        System.out.println(atomicIntegerArray.get(<span class="number">0</span>));</div><div class="line">        System.out.println(array[<span class="number">0</span>]);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
